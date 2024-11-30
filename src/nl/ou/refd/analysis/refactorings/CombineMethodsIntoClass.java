@@ -15,6 +15,8 @@ import nl.ou.refd.locations.specifications.MethodSpecification;
  */
 public class CombineMethodsIntoClass extends Refactoring {
 	
+	private String name = "Combine Methods Into Class";
+	
 	/**
 	 * Creates the Combine Methods into Class refactoring with a destinitian class which will be
 	 * created, and a list of target methods which will be moved to the newly created destination
@@ -42,5 +44,10 @@ public class CombineMethodsIntoClass extends Refactoring {
 		return new VerdictFunction(aggregator) {};
 		
 	}
+	
+	@Override
+	public String getName() {
+		return this.name;
+	}	
 
 }

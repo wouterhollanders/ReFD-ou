@@ -27,6 +27,8 @@ public class PullUpMethod extends Refactoring {
 	
 	private final boolean toDirectSuperclass;
 	
+	private String name = "Pull Up Method";
+	
 	/**
 	 * Creates the Pull Up Method refactoring with a target method that should be
 	 * pull upped, and a destination class the method should be pull upped to.
@@ -55,6 +57,7 @@ public class PullUpMethod extends Refactoring {
 	@Override
 	public VerdictFunction verdictFunction(DangerAggregator aggregator) {
 		
+		System.out.println("Verdict started ...");
 		return new VerdictFunction(aggregator) {
 			@Override
 			public void visit(CorrespondingSubclassSpecification.Method detector) {
@@ -104,5 +107,9 @@ public class PullUpMethod extends Refactoring {
 		};
 		
 	}
-	
+
+	@Override
+	public String getName() {
+		return this.name;
+	}	
 }

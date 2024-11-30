@@ -28,6 +28,7 @@ public class PullUpMethodButton extends MenuButtonHandler {
 	 */
 	@Override
 	public void handle(ExecutionEvent event) {
+		System.out.println("Selection Started...");
 		GraphQuery selectedElement = SelectionUtil.getSelection();
 		
 		if (selectedElement.locationCount() < 1) {
@@ -54,12 +55,16 @@ public class PullUpMethodButton extends MenuButtonHandler {
 			e.printStackTrace();
 		}
 		
+		System.out.println("Destination Selector Creator");
+
 		ElementListSelectionDialog destinationSelector = new ElementListSelectionDialog(HandlerUtil.getActiveShell(event), new LabelProvider());
 		destinationSelector.setElements(new MethodSet(methodSource).stream().parentClasses().allSuperClasses().collect().toLocationSpecifications().toArray());
 		destinationSelector.setTitle("Select destination superclass");
 		destinationSelector.open();
 		
+		System.out.println("Destination Selector Creator 1");
 		ClassSpecification destination = (ClassSpecification)destinationSelector.getResult()[0];
+		System.out.println("Destination Selector Creator selected: "+ destination);
 		
 		try {
 			Controller.getController().pullUpMethod(methodSource, destination);
