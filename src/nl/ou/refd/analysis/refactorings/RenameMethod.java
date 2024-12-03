@@ -18,35 +18,30 @@ import nl.ou.refd.locations.streams.ClassStream;
 import nl.ou.refd.locations.streams.InstructionStream;
 
 /**
- * Class representing a Pull Up Method refactoring. This refactoring can be analyzed by
+ * Class representing a Rename Method refactoring. This refactoring can be analyzed by
  * using a DangerAnalyzer object.
  */
-public class PullUpMethod extends Refactoring {
+public class RenameMethod extends Refactoring {
 
 	private final MethodSpecification target;
 	
 	private final boolean toDirectSuperclass;
 	
-	private String name = "Pull Up Method";
+	private String name = "Rename Method";
 	
 	/**
-	 * Creates the Pull Up Method refactoring with a target method that should be
-	 * pull upped, and a destination class the method should be pull upped to.
-	 * @param target method that should be pull upped
-	 * @param destination class the method should be pull upped to
+	 *  
+	 *  
+	 * @param target method that should be pull upped.
+	 * @param string name of new method.
 	 */
-	public PullUpMethod(MethodSpecification target, ClassSpecification destination) {
+	public RenameMethod(MethodSpecification target, String newMethodName) {
 		this.target = target;
-		this.toDirectSuperclass = 
-				new ClassSet(target.getEnclosingClass())
-				.stream()
-				.directSuperClasses()
-				.intersectionWithClasses(
-						new ClassSet(destination).stream()
-				).collect().size() > 0;
+		this.toDirectSuperclass = false;
 		
 		MethodSpecification newLocation = target.copy();
-		newLocation.setEnclosingClass(destination);
+		newLocation.setMethodName(newMethodName);
+		newLocation.setEnclosingClass(target.getEnclosingClass());
 		
 		microstep(new MoveMethod(target, newLocation));
 	}

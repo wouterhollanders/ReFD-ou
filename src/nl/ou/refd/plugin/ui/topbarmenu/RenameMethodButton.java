@@ -4,6 +4,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
 
 import com.ensoftcorp.open.commons.ui.utilities.DisplayUtils;
 import com.ensoftcorp.open.commons.utilities.MappingUtils;
@@ -21,33 +23,35 @@ import nl.ou.refd.plugin.Controller;
  * Class representing the menu button for the Pull Up Method refactoring
  * option. The presence of this button can be configured in plugin.xml.
  */
-public class PullUpMethodButton extends MenuButtonHandler {
+/**
+ * Class representing the menu button for the Rename Method refactoring option.
+ * The presence of this button can be configured in plugin.xml.
+ */
+public class RenameMethodButton extends MenuButtonHandler {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void handle(ExecutionEvent event) {
-		
 		GraphQuery selectedElement = SelectionUtil.getSelection();
-		
+
 		if (selectedElement.locationCount() < 1) {
 			DisplayUtils.showMessage("Error: No selection made");
 			return;
 		}
-		
+
 		ProgramLocation location = selectedElement.singleLocation();
-		
+
 		MethodSpecification methodSource = null;
-		
+
 		if (MethodSpecification.locationIsMethod(location)) {
 			methodSource = new MethodSpecification(location);
-		}
-		else {
+		} else {
 			DisplayUtils.showMessage("Error: Selection was not a method");
 			return;
 		}
-		
+
 		try {
 			MappingUtils.mapWorkspace();
 			Thread.sleep(1000);
@@ -55,18 +59,22 @@ public class PullUpMethodButton extends MenuButtonHandler {
 			e.printStackTrace();
 		}
 
-		ElementListSelectionDialog destinationSelector = new ElementListSelectionDialog(HandlerUtil.getActiveShell(event), new LabelProvider());
-		destinationSelector.setElements(new MethodSet(methodSource).stream().parentClasses().allSuperClasses().collect().toLocationSpecifications().toArray());
-		destinationSelector.setTitle("Select destination superclass");
-		destinationSelector.open();
-		
-		ClassSpecification destination = (ClassSpecification)destinationSelector.getResult()[0];
-		
-		try {
-			Controller.getController().pullUpMethod(methodSource, destination);
-		} catch (NoActiveProjectException e) {
-			DisplayUtils.showMessage("Error: No active project");
-			return;
+		// Prompt the user for the new method name
+		InputDialog inputDialog = new InputDialog(HandlerUtil.getActiveShell(event), "Rename Method",
+				"Enter the new name for the method:", methodSource.getMethodName(), // Default value
+				null // Validator can be added here if needed
+		);
+
+		if (inputDialog.open() == Window.OK) {
+			String newMethodName = inputDialog.getValue();
+
+			try {
+				Controller.getController().renameMethod(methodSource, newMethodName);
+			} catch (Exception e) {
+				DisplayUtils.showMessage("Error: Unable to rename method. " + e.getMessage());
+			}
+		} else {
+			System.out.println("User canceled the rename operation.");
 		}
 	}
 }

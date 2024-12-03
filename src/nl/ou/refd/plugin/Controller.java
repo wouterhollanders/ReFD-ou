@@ -8,6 +8,7 @@ import org.osgi.framework.BundleContext;
 import nl.ou.refd.analysis.DangerAnalyser;
 import nl.ou.refd.analysis.refactorings.CombineMethodsIntoClass;
 import nl.ou.refd.analysis.refactorings.PullUpMethod;
+import nl.ou.refd.analysis.refactorings.RenameMethod;
 import nl.ou.refd.exceptions.NoActiveProjectException;
 import nl.ou.refd.locations.specifications.ClassSpecification;
 import nl.ou.refd.locations.specifications.MethodSpecification;
@@ -99,6 +100,37 @@ public class Controller extends AbstractUIPlugin {
 				CombineMethodsIntoClass refactoring = new CombineMethodsIntoClass(destination, targets);
 				new DangerAnalyser(refactoring).analyse()
 						.forEach(danger -> danger.mark(new MarkerCreator(project)::defaultMarker));
+			}
+		}).start();
+	}
+	
+	/**
+	 * Start a refactoring analysis for the Pull Up Method refactoring. This method
+	 * starts a new thread to not block the program during analysis.
+	 * 
+	 * @param target      the method to pull up
+	 * @param destination the class to pull target up to
+	 * @throws NoActiveProjectException
+	 */
+	public void renameMethod(MethodSpecification target, String newMethodName)
+			throws NoActiveProjectException {
+		final IProject project = EclipseUtil.currentProject();
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				RenameMethod refactoring = new RenameMethod(target, newMethodName);
+				var dangers = new DangerAnalyser(refactoring).analyse();// .forEach(danger -> danger.mark(new
+																		// MarkerCreator(project)::defaultMarker));
+				if (dangers == null || dangers.isEmpty()) {
+					// Use the new safe refactor marker
+					PopupUtil.showSafeRefactoringPopup(refactoring.getName());
+					System.out.println("Refactor is Safe to use ...");
+				} else {
+					// Create markers for each danger
+					dangers.forEach(danger -> danger.mark(new MarkerCreator(project)::defaultMarker));
+				}
 			}
 		}).start();
 	}

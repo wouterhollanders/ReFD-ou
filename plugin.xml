@@ -12,6 +12,15 @@
 	<extension
 		point="org.eclipse.ui.commands">
 		<command
+			defaultHandler="nl.ou.refd.plugin.ui.topbarmenu.RenameMethodButton"
+			id="refd.RenameMethodButton"
+			name="RenameMethodButton">
+		</command>
+	</extension>
+
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
 			defaultHandler="nl.ou.refd.plugin.ui.topbarmenu.PullUpMethodButton"
 			id="refd.PullUpMethodButton"
 			name="PullUpMethodButton">
@@ -34,11 +43,31 @@
 				id="RGW"
 				label="ReFD">
 				<command
+					commandId="refd.RenameMethodButton"
+					label="Rename Method"
+					style="push"
+					tooltip="Rename a method">
+				</command>
+				<separator
+					name="separator-1"
+					visible="true">
+				</separator>
+				<command
 					commandId="refd.PullUpMethodButton"
 					label="Pull Up Method"
 					style="push"
 					tooltip="Pull up a method to one of its superclasses">
 				</command>
+				<command
+					commandId="refd.FormTemplateMethod"
+					label="Form Template Method"
+					style="push"
+					tooltip="Convert similar methods in subclasses into a single template method in the superclass to promote code reuse and simplify maintenance.">
+				</command>
+				<separator
+					name="separator-2"
+					visible="true">
+				</separator>
 				<command
 					commandId="refd.CombineMethodsIntoClassButton"
 					label="Combine Methods into Class"
@@ -46,6 +75,7 @@
 					tooltip="Combine a number of methods into a newly created class">
 				</command>
 			</menu>
+
 		</menuContribution>
 	</extension>
 	<extension
