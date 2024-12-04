@@ -1,1 +1,4 @@
 bin/
+setup_eclipse_runtime_workspace.bat
+
+setup_eclipse_runtime_workspace.ps1

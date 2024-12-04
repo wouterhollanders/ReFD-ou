@@ -13,7 +13,7 @@ public class PopupUtil {
 		Display.getDefault().asyncExec(() -> {
 			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 			MessageDialog.openInformation(shell, REFACTORING_ACTION_COMPLETED,
-					"Refactoring Action " + refactoringName + " is safe to use.");
+					"Refactoring Action: " + refactoringName + " is safe to use.");
 		});
 	}
 }

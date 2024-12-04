@@ -20,7 +20,7 @@ import nl.ou.refd.locations.specifications.MethodSpecification;
 import nl.ou.refd.plugin.Controller;
 
 /**
- * Class representing the menu button for the Pull Up Method refactoring
+ * Class representing the menu button for the Rename Method refactoring
  * option. The presence of this button can be configured in plugin.xml.
  */
 /**
@@ -41,7 +41,14 @@ public class RenameMethodButton extends MenuButtonHandler {
 			return;
 		}
 
-		ProgramLocation location = selectedElement.singleLocation();
+		ProgramLocation location = null;
+		try {
+			location = selectedElement.singleLocation();
+		} catch (Exception ex) {
+			DisplayUtils.showMessage("Error: Multiple selections found, please select only one location.");
+			ex.printStackTrace();
+			return;
+		}
 
 		MethodSpecification methodSource = null;
 

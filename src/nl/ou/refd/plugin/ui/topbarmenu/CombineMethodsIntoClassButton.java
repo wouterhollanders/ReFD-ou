@@ -39,31 +39,36 @@ public class CombineMethodsIntoClassButton extends MenuButtonHandler {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		IProject currentProject;
-		
+
 		try {
 			currentProject = EclipseUtil.currentProject();
 		} catch (NoActiveProjectException e) {
 			DisplayUtils.showMessage("Error: No active project");
 			return;
 		}
-		
-		String newClassString = DisplayUtils.promptString("New Class", "Please provide the visibility, name and package of the new class to combine method into (pacakge, visibility, classname)");
+
+		String newClassString = DisplayUtils.promptString("New Class",
+				"Please provide the visibility, name and package of the new class to combine method into (pacakge, visibility, classname)");
 		String[] splitClassString = newClassString.split(",");
-		
-		ClassSpecification newClassLocation = new ClassSpecification(splitClassString[2], AccessModifier.fromString(splitClassString[1]), new PackageSpecification(splitClassString[0]));
-		
-		ElementListSelectionDialog destinationSelector = new ElementListSelectionDialog(HandlerUtil.getActiveShell(event), new LabelProvider());
-		destinationSelector.setElements(new ProjectProgramComponentsGenerator(currentProject.getName()).stream().classes().methods().collect().toLocationSpecifications().toArray(new MethodSpecification[]{}));
+
+		ClassSpecification newClassLocation = new ClassSpecification(splitClassString[2],
+				AccessModifier.fromString(splitClassString[1]), new PackageSpecification(splitClassString[0]));
+
+		ElementListSelectionDialog destinationSelector = new ElementListSelectionDialog(
+				HandlerUtil.getActiveShell(event), new LabelProvider());
+		destinationSelector.setElements(new ProjectProgramComponentsGenerator(currentProject.getName()).stream()
+				.classes().methods().collect().toLocationSpecifications().toArray(new MethodSpecification[] {}));
 		destinationSelector.setTitle("Select methods to move into new class");
 		destinationSelector.setMultipleSelection(true);
 		destinationSelector.open();
-		
+
 		Object[] result = destinationSelector.getResult();
-		
-		List<MethodSpecification> targets = Arrays.asList(Arrays.copyOf(result, result.length, MethodSpecification[].class));
-		
+
+		List<MethodSpecification> targets = Arrays
+				.asList(Arrays.copyOf(result, result.length, MethodSpecification[].class));
+
 		try {
 			Controller.getController().combineMethodsIntoClass(targets, newClassLocation);
 		} catch (NoActiveProjectException e) {

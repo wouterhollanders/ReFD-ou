@@ -18,8 +18,8 @@ import nl.ou.refd.locations.specifications.MethodSpecification;
 import nl.ou.refd.plugin.Controller;
 
 /**
- * Class representing the menu button for the Pull Up Method refactoring
- * option. The presence of this button can be configured in plugin.xml.
+ * Class representing the menu button for the Pull Up Method refactoring option.
+ * The presence of this button can be configured in plugin.xml.
  */
 public class PullUpMethodButton extends MenuButtonHandler {
 
@@ -28,26 +28,32 @@ public class PullUpMethodButton extends MenuButtonHandler {
 	 */
 	@Override
 	public void handle(ExecutionEvent event) {
-		
+
 		GraphQuery selectedElement = SelectionUtil.getSelection();
-		
+
 		if (selectedElement.locationCount() < 1) {
 			DisplayUtils.showMessage("Error: No selection made");
 			return;
 		}
-		
-		ProgramLocation location = selectedElement.singleLocation();
-		
+
+		ProgramLocation location = null;
+		try {
+			location = selectedElement.singleLocation();
+		} catch (Exception ex) {
+			DisplayUtils.showMessage("Error: Multiple selections found, please select only one location.");
+			ex.printStackTrace();
+			return;
+		}
+
 		MethodSpecification methodSource = null;
-		
+
 		if (MethodSpecification.locationIsMethod(location)) {
 			methodSource = new MethodSpecification(location);
-		}
-		else {
+		} else {
 			DisplayUtils.showMessage("Error: Selection was not a method");
 			return;
 		}
-		
+
 		try {
 			MappingUtils.mapWorkspace();
 			Thread.sleep(1000);
@@ -55,13 +61,15 @@ public class PullUpMethodButton extends MenuButtonHandler {
 			e.printStackTrace();
 		}
 
-		ElementListSelectionDialog destinationSelector = new ElementListSelectionDialog(HandlerUtil.getActiveShell(event), new LabelProvider());
-		destinationSelector.setElements(new MethodSet(methodSource).stream().parentClasses().allSuperClasses().collect().toLocationSpecifications().toArray());
+		ElementListSelectionDialog destinationSelector = new ElementListSelectionDialog(
+				HandlerUtil.getActiveShell(event), new LabelProvider());
+		destinationSelector.setElements(new MethodSet(methodSource).stream().parentClasses().allSuperClasses().collect()
+				.toLocationSpecifications().toArray());
 		destinationSelector.setTitle("Select destination superclass");
 		destinationSelector.open();
-		
-		ClassSpecification destination = (ClassSpecification)destinationSelector.getResult()[0];
-		
+
+		ClassSpecification destination = (ClassSpecification) destinationSelector.getResult()[0];
+
 		try {
 			Controller.getController().pullUpMethod(methodSource, destination);
 		} catch (NoActiveProjectException e) {

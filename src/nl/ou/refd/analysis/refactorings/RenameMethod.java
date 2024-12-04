@@ -18,92 +18,89 @@ import nl.ou.refd.locations.streams.ClassStream;
 import nl.ou.refd.locations.streams.InstructionStream;
 
 /**
- * Class representing a Rename Method refactoring. This refactoring can be analyzed by
- * using a DangerAnalyzer object.
+ * Class representing a Rename Method refactoring. This refactoring can be
+ * analyzed by using a DangerAnalyzer object.
  */
 public class RenameMethod extends Refactoring {
 
 	private final MethodSpecification target;
-	
+
 	private final boolean toDirectSuperclass;
-	
+
 	private String name = "Rename Method";
-	
+
 	/**
-	 *  
-	 *  
+	 * 
+	 * 
 	 * @param target method that should be pull upped.
 	 * @param string name of new method.
 	 */
 	public RenameMethod(MethodSpecification target, String newMethodName) {
 		this.target = target;
 		this.toDirectSuperclass = false;
-		
-		MethodSpecification newLocation = target.copy();
-		newLocation.setMethodName(newMethodName);
-		newLocation.setEnclosingClass(target.getEnclosingClass());
-		
-		microstep(new MoveMethod(target, newLocation));
+
+		var newMethod = new MethodSpecification(newMethodName, target.getParameters(), target.getVisibility(),
+				target.isStatic(), target.isAbstract(), target.getReturnType(), target.getEnclosingClass());
+
+		microstep(new MoveMethod(target, newMethod));
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public VerdictFunction verdictFunction(DangerAggregator aggregator) {
-		
+
 		return new VerdictFunction(aggregator) {
 			@Override
 			public void visit(CorrespondingSubclassSpecification.Method detector) {
-				partial(detector, detector.actualRisks().stream().differenceWithMethods(new MethodSet(target).stream()).collect());
+				partial(detector, detector.actualRisks().stream().differenceWithMethods(new MethodSet(target).stream())
+						.collect());
 			}
-			
+
 			@Override
 			public void visit(MissingDefinition.Method detector) {
 				none(detector);
 			}
-			
+
 			@Override
 			public void visit(MissingAbstractImplementation.Method detector) {
 				none(detector);
 			}
-			
+
 			@Override
 			public void visit(RemovedConcreteOverride.Method detector) {
 				if (toDirectSuperclass) {
 					none(detector);
-				}
-				else {
+				} else {
 					all(detector);
 				}
 			}
-			
+
 			@Override
 			public void visit(LostSpecification.Method detector) {
 				if (toDirectSuperclass) {
 					none(detector);
-				}
-				else {
+				} else {
 					all(detector);
 				}
 			}
-			
+
 			@Override
 			public void visit(MissingSuperImplementation.Method detector) {
 				if (toDirectSuperclass) {
 					none(detector);
-				}
-				else {
+				} else {
 					all(detector);
 				}
 			}
-			
+
 		};
-		
+
 	}
 
 	@Override
 	public String getName() {
 		return this.name;
-	}	
+	}
 }
