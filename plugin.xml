@@ -36,6 +36,14 @@
 		</command>
 	</extension>
 	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			defaultHandler="nl.ou.refd.plugin.ui.topbarmenu.FormTemplateMethodButton"
+			id="refd.FormTemplateMethodButton"
+			name="FormTemplateMethodButton">
+		</command>
+	</extension>
+	<extension
 		point="org.eclipse.ui.menus">
 		<menuContribution
 			locationURI="menu:org.eclipse.ui.main.menu">
@@ -59,7 +67,7 @@
 					tooltip="Pull up a method to one of its superclasses">
 				</command>
 				<command
-					commandId="refd.FormTemplateMethod"
+					commandId="refd.FormTemplateMethodButton"
 					label="Form Template Method"
 					style="push"
 					tooltip="Convert similar methods in subclasses into a single template method in the superclass to promote code reuse and simplify maintenance.">
