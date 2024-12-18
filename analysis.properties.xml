@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<properties>
+   <jars>
+      <applications/>
+      <libraries>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/com.ensoftcorp.atlas.core_4.2.5.202411211923.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/com.ensoftcorp.atlas.db.common_4.2.5.202411211923.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/com.ensoftcorp.atlas.db.implementation_4.2.5.202411211923.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/com.ensoftcorp.atlas.db_4.2.5.202411211923.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/com.ensoftcorp.atlas.ui_4.2.5.202411211923.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/com.ensoftcorp.open.commons.ui_3.9.2.202305211154.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/com.ensoftcorp.open.commons_3.9.2.202305211154.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_23.0.1.v20241024-1700/jre/lib/jrt-fs.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.apache.commons.lang3_3.17.0.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.core.commands_3.12.200.v20240627-1019.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.core.contenttype_3.9.500.v20240708-0707.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.core.jobs_3.15.400.v20240619-0602.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.core.resources_3.21.0.v20240805-1607.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.core.runtime_3.31.100.v20240524-2010.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.e4.ui.workbench3_0.17.400.v20240321-1245.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.equinox.common_3.19.100.v20240524-2011.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.equinox.registry_3.12.100.v20240524-2011.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.jface.text_3.25.200.v20240816-1151.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.jface_3.35.0.v20240820-2045.jar"/>
+         <jar main-class="org.eclipse.core.runtime.adaptor.EclipseStarter" path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.osgi_3.21.0.v20240717-2103.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.swt.win32.win32.x86_64_3.127.0.v20240903-0618.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.text_3.14.100.v20240524-2010.jar"/>
+         <jar path="/Users/w.hollanders/.p2/pool/plugins/org.eclipse.ui.workbench_3.133.0.v20240818-1923.jar"/>
+      </libraries>
+      <runtimes/>
+   </jars>
+</properties>

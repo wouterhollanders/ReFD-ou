@@ -3,6 +3,7 @@ package nl.ou.refd.plugin;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import nl.ou.refd.analysis.DangerAnalyser;
@@ -48,6 +49,15 @@ public class Controller extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		controller = null;
 		super.stop(context);
+	}
+
+	public void resetAnalysis() {
+		var markerRemover = new MarkerRemover();
+		try {
+			markerRemover.removeReFDDangerMarkers();
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -103,7 +113,7 @@ public class Controller extends AbstractUIPlugin {
 			}
 		}).start();
 	}
-	
+
 	/**
 	 * Start a refactoring analysis for the Pull Up Method refactoring. This method
 	 * starts a new thread to not block the program during analysis.
@@ -112,8 +122,7 @@ public class Controller extends AbstractUIPlugin {
 	 * @param destination the class to pull target up to
 	 * @throws NoActiveProjectException
 	 */
-	public void renameMethod(MethodSpecification target, String newMethodName)
-			throws NoActiveProjectException {
+	public void renameMethod(MethodSpecification target, String newMethodName) throws NoActiveProjectException {
 		final IProject project = EclipseUtil.currentProject();
 
 		new Thread(new Runnable() {

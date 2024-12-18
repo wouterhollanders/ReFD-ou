@@ -20,13 +20,10 @@ import nl.ou.refd.locations.specifications.MethodSpecification;
 import nl.ou.refd.plugin.Controller;
 
 /**
- * Class representing the menu button for the Rename Method refactoring
- * option. The presence of this button can be configured in plugin.xml.
- */
-/**
- * Class representing the menu button for the Rename Method refactoring option.
+ * Class representing the menu button for the reset of the analysis within the Eclipse session
  * The presence of this button can be configured in plugin.xml.
  */
+
 public class RenameMethodButton extends MenuButtonHandler {
 
 	/**

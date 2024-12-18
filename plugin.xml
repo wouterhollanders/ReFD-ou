@@ -44,6 +44,14 @@
 		</command>
 	</extension>
 	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			defaultHandler="nl.ou.refd.plugin.ui.topbarmenu.ResetAnalysisButton"
+			id="refd.ResetAnalysisButton"
+			name="ResetAnalysisButton">
+		</command>
+	</extension>
+	<extension
 		point="org.eclipse.ui.menus">
 		<menuContribution
 			locationURI="menu:org.eclipse.ui.main.menu">
@@ -82,6 +90,16 @@
 					style="push"
 					tooltip="Combine a number of methods into a newly created class">
 				</command>
+				<separator
+					name="separator-3"
+					visible="true">
+				</separator>
+				<command
+					commandId="refd.ResetAnalysisButton"
+					label="Reset Analysis results"
+					style="push"
+					tooltip="Resets the results of previous analysis">
+				</command>
 			</menu>
 
 		</menuContribution>
@@ -89,7 +107,7 @@
 	<extension
 		point="org.eclipse.ui.startup">
 		<startup
-			class="nl.ou.refd.plugin.MarkerRemover">
+			class="nl.ou.refd.plugin.StartUp">
 		</startup>
 	</extension>
 </plugin>

@@ -12,6 +12,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.ensoftcorp.open.commons.ui.utilities.DisplayUtils;
+
+import nl.ou.refd.locations.graph.GraphQuery;
+import nl.ou.refd.locations.graph.ProgramLocation;
+import nl.ou.refd.locations.graph.SelectionUtil;
+
 public class CodeComparisonSelectionDialog extends Dialog {
     private SourceViewer sourceViewer1;
     private SourceViewer sourceViewer2;
@@ -82,6 +88,22 @@ public class CodeComparisonSelectionDialog extends Dialog {
         // Perform your refactoring logic using selection1 and selection2
         System.out.println("Selection from Viewer 1: " + selection1.getText());
         System.out.println("Selection from Viewer 2: " + selection2.getText());
+        
+        GraphQuery selectedElement = SelectionUtil.getSelection();
+
+		if (selectedElement.locationCount() < 1) {
+			DisplayUtils.showMessage("Error: No selection made");
+			return;
+		}
+
+		ProgramLocation location = null;
+		try {
+			location = selectedElement.singleLocation();
+		} catch (Exception ex) {
+			DisplayUtils.showMessage("Error: Multiple selections found, please select only one location.");
+			ex.printStackTrace();
+			return;
+		}
 
         super.okPressed();
     }

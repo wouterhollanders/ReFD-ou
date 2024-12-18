@@ -18,6 +18,7 @@ import nl.ou.refd.locations.specifications.ClassSpecification;
 import nl.ou.refd.locations.specifications.MethodSpecification;
 import nl.ou.refd.plugin.Controller;
 import nl.ou.refd.plugin.ui.CodeComparisonSelectionDialog;
+import nl.ou.refd.plugin.ui.JavaFileReader;
 
 /**
  * Class representing the menu button for the Form Template Method  refactoring.
@@ -30,27 +31,18 @@ public class FormTemplateMethodButton extends MenuButtonHandler {
 	 */
 	@Override
 	public void handle(ExecutionEvent event) {
-		
+	
+		String javaFilePath1 = "C:\\Users\\w.hollanders\\runtime-EclipseApplication\\java-refactoring-examples\\Form Template Method\\src\\refactoring\\examples\\FormTemplateMethod\\LifelineSite.java";
+		String javaFilePath2 = "C:\\Users\\w.hollanders\\runtime-EclipseApplication\\java-refactoring-examples\\Form Template Method\\src\\refactoring\\examples\\FormTemplateMethod\\ResidentialSite.java";
+		String formattedContent1 = JavaFileReader.readAndFormatJavaFile(javaFilePath1);
+		String formattedContent2 = JavaFileReader.readAndFormatJavaFile(javaFilePath2);
+
 		Shell shell = new Shell();
-		CodeComparisonSelectionDialog dialog = new CodeComparisonSelectionDialog(shell, "public void method1() {}", "public void method2() {}");
-		dialog.open();
 
+		CodeComparisonSelectionDialog dialog = new CodeComparisonSelectionDialog(shell, formattedContent1, formattedContent2);
+		dialog.open();		
 
-//		GraphQuery selectedElement = SelectionUtil.getSelection();
-//
-//		if (selectedElement.locationCount() < 1) {
-//			DisplayUtils.showMessage("Error: No selection made");
-//			return;
-//		}
-//
-//		ProgramLocation location = null;
-//		try {
-//			location = selectedElement.singleLocation();
-//		} catch (Exception ex) {
-//			DisplayUtils.showMessage("Error: Multiple selections found, please select only one location.");
-//			ex.printStackTrace();
-//			return;
-//		}
+		
 //
 //		MethodSpecification methodSource = null;
 //

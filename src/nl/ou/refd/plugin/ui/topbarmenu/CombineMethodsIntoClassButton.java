@@ -2,16 +2,13 @@ package nl.ou.refd.plugin.ui.topbarmenu;
 
 import java.util.Arrays;
 import java.util.List;
-
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
-
 import com.ensoftcorp.open.commons.ui.utilities.DisplayUtils;
 import com.ensoftcorp.open.commons.utilities.MappingUtils;
-
 import nl.ou.refd.exceptions.NoActiveProjectException;
 import nl.ou.refd.locations.generators.ProjectProgramComponentsGenerator;
 import nl.ou.refd.locations.specifications.ClassSpecification;

@@ -50,53 +50,9 @@ public class RenameMethod extends Refactoring {
 	 */
 	@Override
 	public VerdictFunction verdictFunction(DangerAggregator aggregator) {
-
-		return new VerdictFunction(aggregator) {
-			@Override
-			public void visit(CorrespondingSubclassSpecification.Method detector) {
-				partial(detector, detector.actualRisks().stream().differenceWithMethods(new MethodSet(target).stream())
-						.collect());
-			}
-
-			@Override
-			public void visit(MissingDefinition.Method detector) {
-				none(detector);
-			}
-
-			@Override
-			public void visit(MissingAbstractImplementation.Method detector) {
-				none(detector);
-			}
-
-			@Override
-			public void visit(RemovedConcreteOverride.Method detector) {
-				if (toDirectSuperclass) {
-					none(detector);
-				} else {
-					all(detector);
-				}
-			}
-
-			@Override
-			public void visit(LostSpecification.Method detector) {
-				if (toDirectSuperclass) {
-					none(detector);
-				} else {
-					all(detector);
-				}
-			}
-
-			@Override
-			public void visit(MissingSuperImplementation.Method detector) {
-				if (toDirectSuperclass) {
-					none(detector);
-				} else {
-					all(detector);
-				}
-			}
-
-		};
-
+		//TODO: No MissingSuperImplementation when the overridden method is also combined
+		return new VerdictFunction(aggregator) {};
+		
 	}
 
 	@Override
