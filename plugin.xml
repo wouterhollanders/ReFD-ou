@@ -96,7 +96,7 @@
 				</separator>
 				<command
 					commandId="refd.ResetAnalysisButton"
-					label="Reset Analysis results"
+					label="Reset Analysis Results"
 					style="push"
 					tooltip="Resets the results of previous analysis">
 				</command>
