@@ -168,6 +168,10 @@ public class MethodSpecification extends LocationSpecification {
 	public void setEnclosingClass(ClassSpecification enclosingClass) {
 		this.enclosingClass = enclosingClass;
 	}
+	
+	public void setAbstract(boolean isAbstract) {
+		this.isAbstract = isAbstract;
+	}
 
 	/**
 	 * Gets an ordered list of the types of the parameters as strings.

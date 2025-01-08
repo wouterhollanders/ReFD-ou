@@ -1,5 +1,6 @@
 package nl.ou.refd.plugin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -8,9 +9,12 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import nl.ou.refd.analysis.DangerAnalyser;
 import nl.ou.refd.analysis.refactorings.CombineMethodsIntoClass;
+import nl.ou.refd.analysis.refactorings.FormTemplateMethod;
 import nl.ou.refd.analysis.refactorings.PullUpMethod;
+import nl.ou.refd.analysis.refactorings.Refactoring;
 import nl.ou.refd.analysis.refactorings.RenameMethod;
 import nl.ou.refd.exceptions.NoActiveProjectException;
+import nl.ou.refd.locations.collections.LabeledLocationSet;
 import nl.ou.refd.locations.specifications.ClassSpecification;
 import nl.ou.refd.locations.specifications.MethodSpecification;
 import nl.ou.refd.plugin.ui.EclipseUtil;
@@ -77,12 +81,12 @@ public class Controller extends AbstractUIPlugin {
 			@Override
 			public void run() {
 				PullUpMethod refactoring = new PullUpMethod(target, destination);
-				var dangers = new DangerAnalyser(refactoring).analyse();// .forEach(danger -> danger.mark(new
-																		// MarkerCreator(project)::defaultMarker));
+				var dangers = new DangerAnalyser(refactoring).analyse();
+
 				if (dangers == null || dangers.isEmpty()) {
 					// Use the new safe refactor marker
 					PopupUtil.showSafeRefactoringPopup(refactoring.getName());
-					System.out.println("Refactor is Safe to use ...");
+
 				} else {
 					// Create markers for each danger
 					dangers.forEach(danger -> danger.mark(new MarkerCreator(project)::defaultMarker));
@@ -108,8 +112,16 @@ public class Controller extends AbstractUIPlugin {
 			@Override
 			public void run() {
 				CombineMethodsIntoClass refactoring = new CombineMethodsIntoClass(destination, targets);
-				new DangerAnalyser(refactoring).analyse()
-						.forEach(danger -> danger.mark(new MarkerCreator(project)::defaultMarker));
+				var dangers = new DangerAnalyser(refactoring).analyse();
+
+				if (dangers == null || dangers.isEmpty()) {
+					// Use the new safe refactor marker
+					PopupUtil.showSafeRefactoringPopup(refactoring.getName());
+
+				} else {
+					// Create markers for each danger
+					dangers.forEach(danger -> danger.mark(new MarkerCreator(project)::defaultMarker));
+				}
 			}
 		}).start();
 	}
@@ -130,14 +142,42 @@ public class Controller extends AbstractUIPlugin {
 			@Override
 			public void run() {
 				RenameMethod refactoring = new RenameMethod(target, newMethodName);
-				var dangers = new DangerAnalyser(refactoring).analyse();// .forEach(danger -> danger.mark(new
-																		// MarkerCreator(project)::defaultMarker));
+				var dangers = new DangerAnalyser(refactoring).analyse();
+
 				if (dangers == null || dangers.isEmpty()) {
 					// Use the new safe refactor marker
 					PopupUtil.showSafeRefactoringPopup(refactoring.getName());
-					System.out.println("Refactor is Safe to use ...");
+
 				} else {
 					// Create markers for each danger
+					dangers.forEach(danger -> danger.mark(new MarkerCreator(project)::defaultMarker));
+				}
+			}
+		}).start();
+	}
+
+	public void formTemplateMethod(ClassSpecification destinationSuper, List<MethodSpecification> methodsToPull,
+			List<ClassSpecification> subClasses, List<MethodSpecification> methodsToCreate)
+			throws NoActiveProjectException {
+		final IProject project = EclipseUtil.currentProject();
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				var dangers = new ArrayList<LabeledLocationSet>();
+				FormTemplateMethod refactoring = new FormTemplateMethod(destinationSuper, methodsToPull, subClasses,
+						methodsToCreate);
+
+				dangers.addAll(new DangerAnalyser(refactoring).analyse());
+
+				for (Refactoring sub : refactoring.getSubRefactorings()) {
+					dangers.addAll(new DangerAnalyser(sub).analyse());
+				}
+
+				if (dangers == null || dangers.isEmpty()) {
+					PopupUtil.showSafeRefactoringPopup(refactoring.getName());
+				} else {
 					dangers.forEach(danger -> danger.mark(new MarkerCreator(project)::defaultMarker));
 				}
 			}

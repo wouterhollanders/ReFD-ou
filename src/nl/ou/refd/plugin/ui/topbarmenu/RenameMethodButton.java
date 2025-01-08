@@ -32,6 +32,7 @@ public class RenameMethodButton extends MenuButtonHandler {
 	@Override
 	public void handle(ExecutionEvent event) {
 		GraphQuery selectedElement = SelectionUtil.getSelection();
+		selectedElement.project("refactoring.examples.RenameMethod");
 
 		if (selectedElement.locationCount() < 1) {
 			DisplayUtils.showMessage("Error: No selection made");
