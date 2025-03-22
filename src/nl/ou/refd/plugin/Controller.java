@@ -9,13 +9,17 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import nl.ou.refd.analysis.DangerAnalyser;
 import nl.ou.refd.analysis.refactorings.CombineMethodsIntoClass;
+import nl.ou.refd.analysis.refactorings.ExtractMethod;
 import nl.ou.refd.analysis.refactorings.FormTemplateMethod;
 import nl.ou.refd.analysis.refactorings.PullUpMethod;
 import nl.ou.refd.analysis.refactorings.Refactoring;
 import nl.ou.refd.analysis.refactorings.RenameMethod;
 import nl.ou.refd.exceptions.NoActiveProjectException;
+import nl.ou.refd.locations.collections.InstructionSet;
 import nl.ou.refd.locations.collections.LabeledLocationSet;
+import nl.ou.refd.locations.generators.ProgramComponentsGenerator;
 import nl.ou.refd.locations.specifications.ClassSpecification;
+import nl.ou.refd.locations.specifications.InstructionSpecification;
 import nl.ou.refd.locations.specifications.MethodSpecification;
 import nl.ou.refd.plugin.ui.EclipseUtil;
 import nl.ou.refd.plugin.ui.PopupUtil;
@@ -180,6 +184,33 @@ public class Controller extends AbstractUIPlugin {
 				} else {
 					dangers.forEach(danger -> danger.mark(new MarkerCreator(project)::defaultMarker));
 				}
+			}
+		}).start();
+	}
+	
+	public void extractMethod(MethodSpecification destinationMethod, MethodSpecification sourceMethod, List<InstructionSpecification> instructionsToCreate, InstructionSet instructionSet) throws NoActiveProjectException {
+		final IProject project = EclipseUtil.currentProject();
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				ExtractMethod refactoring = new ExtractMethod(destinationMethod, sourceMethod, instructionsToCreate, instructionSet);
+				var dangers = new DangerAnalyser(refactoring).analyse();
+
+				if (dangers == null || dangers.isEmpty()) {
+					// Use the new safe refactor marker
+					PopupUtil.showSafeRefactoringPopup(refactoring.getName());
+
+				} else {
+					// Create markers for each danger
+					dangers.forEach(danger -> danger.mark(new MarkerCreator(project)::defaultMarker));
+				}
+				
+				var methodDest = new ProgramComponentsGenerator().stream().classes().classesByName(destinationMethod.getEnclosingClass().getClassName()).methods().filterByName("ExecuteSimpleExample2").collect().toLocationSpecifications().get(0);
+				var body = methodDest.getBody().collect();
+				var bodyLocations = body.locations();
+
 			}
 		}).start();
 	}

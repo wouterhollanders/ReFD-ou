@@ -15,8 +15,10 @@ import nl.ou.refd.analysis.detectors.MissingSuperImplementation;
 import nl.ou.refd.analysis.detectors.OverloadParameterConversion;
 import nl.ou.refd.analysis.detectors.RemovedConcreteOverride;
 import nl.ou.refd.analysis.microsteps.AddClass;
+import nl.ou.refd.analysis.microsteps.AddInstruction;
 import nl.ou.refd.analysis.microsteps.AddMethod;
 import nl.ou.refd.analysis.microsteps.Microstep;
+import nl.ou.refd.analysis.microsteps.MoveBody;
 import nl.ou.refd.analysis.microsteps.MoveMethod;
 import nl.ou.refd.analysis.microsteps.RemoveMethod;
 import nl.ou.refd.analysis.refactorings.Refactoring;
@@ -78,6 +80,11 @@ public class DangerAnalyser implements ModelVisitor, DangerAggregator {
 	 * @param microstep the MoveMethod microstep to handle
 	 */
 	private void handleMoveMethodMicrostep(MoveMethod microstep) {
+		microstep.getDetectors().forEach(detector -> detector.accept(this));
+		microstep.getComponentMicrosteps().forEach(componentMicrostep -> componentMicrostep.accept(this));
+	}
+	
+	private void handleMoveBodyMicrostep(MoveBody microstep) {
 		microstep.getDetectors().forEach(detector -> detector.accept(this));
 		microstep.getComponentMicrosteps().forEach(componentMicrostep -> componentMicrostep.accept(this));
 	}
@@ -163,6 +170,18 @@ public class DangerAnalyser implements ModelVisitor, DangerAggregator {
 	@Override
 	public void visit(AddClass addClass) {
 		handleMicrostep(addClass);
+	}
+
+	@Override
+	public void visit(AddInstruction microstep) {
+		handleMicrostep(microstep);
+		
+	}
+
+	@Override
+	public void visit(MoveBody microstep) {
+		handleMoveBodyMicrostep(microstep);
+		
 	}
 
 }

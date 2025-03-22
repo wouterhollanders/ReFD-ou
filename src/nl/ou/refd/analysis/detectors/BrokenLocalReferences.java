@@ -54,7 +54,7 @@ public final class BrokenLocalReferences {
 			
 			InstructionStream body = existingBody;
 			
-			return body.methodCalls().union(body.fieldCalls())
+			var test =  body.methodCalls().union(body.fieldCalls())
 			.intersectionWithInstructions(
 					adjustedLocalContext
 				.methods()
@@ -64,6 +64,8 @@ public final class BrokenLocalReferences {
 						.fieldsCalledAt()
 					)
 			).collect();
+			
+			return test;
 		}
 
 		/**

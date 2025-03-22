@@ -46,6 +46,14 @@
 	<extension
 		point="org.eclipse.ui.commands">
 		<command
+			defaultHandler="nl.ou.refd.plugin.ui.topbarmenu.ExtractMethodButton"
+			id="refd.ExtractMethodButton"
+			name="ExtractMethodButton">
+		</command>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
 			defaultHandler="nl.ou.refd.plugin.ui.topbarmenu.ResetAnalysisButton"
 			id="refd.ResetAnalysisButton"
 			name="ResetAnalysisButton">
@@ -92,6 +100,16 @@
 				</command>
 				<separator
 					name="separator-3"
+					visible="true">
+				</separator>
+				<command
+					commandId="refd.ExtractMethodButton"
+					label="Extract Method"
+					style="push"
+					tooltip="Extract body to a new method">
+				</command>
+				<separator
+					name="separator-4"
 					visible="true">
 				</separator>
 				<command

@@ -75,13 +75,14 @@ public final class Tags {
 		IDENTITY_PASS(XCSG.IdentityPass),
 		
 		DATAFLOW(XCSG.DataFlow_Node),
-		
+		CONTROLFLOW(XCSG.ControlFlow_Node),
 		CALL_INPUT(XCSG.CallInput),
 		
 		REFACTOR_CREATED_METHOD("ModelAdapter.REFACTOR_CREATED_METHOD"),
 		REFACTOR_CREATED_CLASS("ModelAdapter.REFACTOR_CREATED_CLASS"),
-		REFACTOR_CREATED_PARAMETER("ModelAdapter.REFACTOR_CREATED_PARAMETER");
-		
+		REFACTOR_CREATED_PARAMETER("ModelAdapter.REFACTOR_CREATED_PARAMETER"),
+		REFACTOR_CREATED_INSTRUCTION("ModelAdapter.REFACTOR_CREATED_INSTRUCTION");
+
 		private final String tag;
 		
 		/**
@@ -121,8 +122,7 @@ public final class Tags {
 		INVOKED_SIGNATURE(XCSG.InvokedSignature),
 		INVOKED_FUNCTION(XCSG.InvokedFunction),
 		OVERRIDES(XCSG.Overrides),
-		DECLARES(com.ensoftcorp.atlas.core.query.Attr.Edge.DECLARES),
-		
+		DECLARES(com.ensoftcorp.atlas.core.query.Attr.Edge.DECLARES),	
 		REFACTOR_CREATED_EDGE("ModelAdapter.REFACTOR_CREATED_EDGE");
 		
 		private final String tag;

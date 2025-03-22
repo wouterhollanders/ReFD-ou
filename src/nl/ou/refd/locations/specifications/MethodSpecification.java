@@ -330,7 +330,7 @@ public class MethodSpecification extends LocationSpecification {
 	 * @return the created ProgramLocation
 	 */
 	private static ProgramLocation createMethod(Graph graph) {
-		ProgramLocation rNode = graph.createProgramLocation();
+		ProgramLocation rNode = Graph.getInstance().createProgramLocation();
 		rNode.tag(Tags.ProgramLocation.METHOD);
 		rNode.tag(Tags.ProgramLocation.FUNCTION);
 		rNode.tag(Tags.ProgramLocation.REFACTOR_CREATED_METHOD);

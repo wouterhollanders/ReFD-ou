@@ -18,6 +18,8 @@ import com.ensoftcorp.open.commons.utilities.MappingUtils;
 import nl.ou.refd.exceptions.NoActiveProjectException;
 import nl.ou.refd.locations.collections.ClassSet;
 import nl.ou.refd.locations.collections.MethodSet;
+import nl.ou.refd.locations.collections.ProgramComponentSet;
+import nl.ou.refd.locations.generators.ProgramComponentsGenerator;
 import nl.ou.refd.locations.generators.ProjectProgramComponentsGenerator;
 import nl.ou.refd.locations.graph.GraphQuery;
 import nl.ou.refd.locations.graph.ProgramLocation;
@@ -60,6 +62,9 @@ public class FormTemplateMethodButton extends MenuButtonHandler {
 			DisplayUtils.showMessage("Error: No active project");
 			return;
 		}
+		
+		
+		
 
 		// Select the super class in where to form the template method.
 		ElementListSelectionDialog destinationSelector = new ElementListSelectionDialog(
@@ -73,16 +78,17 @@ public class FormTemplateMethodButton extends MenuButtonHandler {
 		destinationSelector.open();
 
 		ClassSpecification destination = (ClassSpecification) destinationSelector.getResult()[0];
-
-		// Now fetch the subclasses of this super class.
-		ElementListSelectionDialog subclass = new ElementListSelectionDialog(HandlerUtil.getActiveShell(event),
-				new LabelProvider());
+	
 		
-		var subClasses = new ClassSet(destination).stream().allSubclasses().collect().toLocationSpecifications()
-				.toArray();
-		
-		List<ClassSpecification> subClassesResult = Arrays
-				.asList(Arrays.copyOf(subClasses, subClasses.length, ClassSpecification[].class));
+//		// Now fetch the subclasses of this super class.
+//		ElementListSelectionDialog subclass = new ElementListSelectionDialog(HandlerUtil.getActiveShell(event),
+//				new LabelProvider());
+//		
+//		var subClasses = new ClassSet(destination).stream().allSubclasses().collect().toLocationSpecifications()
+//				.toArray();
+//		
+//		List<ClassSpecification> subClassesResult = Arrays
+//				.asList(Arrays.copyOf(subClasses, subClasses.length, ClassSpecification[].class));
 		
 //		//Placeholder Extract Method
 //		String javaFilePath1 = "C:\\Users\\w.hollanders\\runtime-EclipseApplication\\java-refactoring-examples\\Form Template Method\\src\\refactoring\\examples\\FormTemplateMethod\\LifelineSite.java";
@@ -97,51 +103,51 @@ public class FormTemplateMethodButton extends MenuButtonHandler {
 //		dialog.open();
 
 		//Now create the different methods (extract) from the subclasses.
-		Shell shell = new Shell();
-		MethodSpecificationDialog dialog = new MethodSpecificationDialog(shell, subClassesResult);
-		List<MethodSpecification> methods = null;
-		if (dialog.open() == MethodSpecificationDialog.OK) {
-			methods = dialog.getMethods();
-
-			// Process the list of methods
-			methods.forEach(method -> {
-				System.out.println("Added method: " + method.getMethodName());
-			});
-		}
-
-		// Now select the Template Method.
-		ElementListSelectionDialog methodSelector = new ElementListSelectionDialog(HandlerUtil.getActiveShell(event),
-				new LabelProvider());
-
-		methodSelector.setElements(new ProjectProgramComponentsGenerator(currentProject.getName()).stream().classes().allSubclasses()
-				.methods().collect().toLocationSpecifications().toArray(new MethodSpecification[] {}));
-
-		methodSelector.setTitle("Select identical method(s) as Template Method");
-		methodSelector.setMultipleSelection(true);
-		methodSelector.create();
-		methodSelector.getOkButton().setText("Next");
-		methodSelector.open();
-
-		Object[] methodSelectorResult = methodSelector.getResult();
-		List<MethodSpecification> methodsToPullUp = Arrays
-				.asList(Arrays.copyOf(methodSelectorResult, methodSelectorResult.length, MethodSpecification[].class));
-
-//		// Subclass Methods to Create
-//		List<MethodSpecification> methodsToCreate = new ArrayList<MethodSpecification>();
+//		Shell shell = new Shell();
+//		MethodSpecificationDialog dialog = new MethodSpecificationDialog(shell, subClassesResult);
+//		List<MethodSpecification> methods = null;
+//		if (dialog.open() == MethodSpecificationDialog.OK) {
+//			methods = dialog.getMethods();
 //
-//		List<ParameterSpecification> parameterTypes = new ArrayList<ParameterSpecification>();
-//		for (ClassSpecification subClass : subClassesResult) {
-//			methodsToCreate.add(new MethodSpecification("Method1", parameterTypes, AccessModifier.PUBLIC, false, false,
-//					"void", subClass));
+//			// Process the list of methods
+//			methods.forEach(method -> {
+//				System.out.println("Added method: " + method.getMethodName());
+//			});
 //		}
-
-		try {
-			Controller.getController().formTemplateMethod(destination, methodsToPullUp,
-					subClassesResult, methods);
-		} catch (NoActiveProjectException e) {
-			DisplayUtils.showMessage("Error: No active project");
-			return;
-		}
+//
+//		// Now select the Template Method.
+//		ElementListSelectionDialog methodSelector = new ElementListSelectionDialog(HandlerUtil.getActiveShell(event),
+//				new LabelProvider());
+//
+//		methodSelector.setElements(new ProjectProgramComponentsGenerator(currentProject.getName()).stream().classes().allSubclasses()
+//				.methods().collect().toLocationSpecifications().toArray(new MethodSpecification[] {}));
+//
+//		methodSelector.setTitle("Select identical method(s) as Template Method");
+//		methodSelector.setMultipleSelection(true);
+//		methodSelector.create();
+//		methodSelector.getOkButton().setText("Next");
+//		methodSelector.open();
+//
+//		Object[] methodSelectorResult = methodSelector.getResult();
+//		List<MethodSpecification> methodsToPullUp = Arrays
+//				.asList(Arrays.copyOf(methodSelectorResult, methodSelectorResult.length, MethodSpecification[].class));
+//
+////		// Subclass Methods to Create
+////		List<MethodSpecification> methodsToCreate = new ArrayList<MethodSpecification>();
+////
+////		List<ParameterSpecification> parameterTypes = new ArrayList<ParameterSpecification>();
+////		for (ClassSpecification subClass : subClassesResult) {
+////			methodsToCreate.add(new MethodSpecification("Method1", parameterTypes, AccessModifier.PUBLIC, false, false,
+////					"void", subClass));
+////		}
+//
+//		try {
+//			Controller.getController().formTemplateMethod(destination, methodsToPullUp,
+//					subClassesResult, methods);
+//		} catch (NoActiveProjectException e) {
+//			DisplayUtils.showMessage("Error: No active project");
+//			return;
+//		}
 
 		// Add new Template Method to the superclass
 
