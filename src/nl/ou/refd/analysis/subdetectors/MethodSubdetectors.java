@@ -87,6 +87,38 @@ public final class MethodSubdetectors {
 	}
 
 	/**
+	 * Filters provided method locations and keeps only those whose bodies are empty.
+	 * A method is considered to have an empty body when no control-flow nodes
+	 * are associated with it.
+	 * @return methods with empty bodies
+	 */
+	public static class MethodsWithEmptyBodies extends Subdetector {
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public Set<ProgramLocation> applyOn(Set<ProgramLocation> locations) {
+			var result = Graph.query();
+			for (ProgramLocation method : Graph.query(locations).locations()) {
+				// Use HAS_CONTROL_FLOW to traverse to CF nodes for this method
+				var cf = Graph.query(method).forwardDifference(Tags.Relation.HAS_CONTROL_FLOW);
+				// Count instruction-like CF nodes (assignments, calls, literals, initializations, arithmetic)
+				int instructionCount = (int) cf
+					.locations(Tags.ProgramLocation.ASSIGNMENT,
+					          Tags.ProgramLocation.CALL_INPUT,
+					          Tags.ProgramLocation.INITIALIZATION,
+					          Tags.ProgramLocation.ADDITION,
+					          Tags.ProgramLocation.LITERAL)
+					.locationCount();
+				if (instructionCount == 0) {
+					result = result.union(Graph.query(method));
+				}
+			}
+			return result.locations(Tags.ProgramLocation.METHOD).locations();
+		}
+	}
+
+	/**
 	 * Filters provided method locations and only keeps those with a return type
 	 * specified by type, or a covariant type of that.
 	 * @param type the return type, or covariant of, to filter with

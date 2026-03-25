@@ -59,6 +59,14 @@ public class MethodStream extends Stream {
 	public InstructionStream bodies() {
 		return new InstructionStream(this, new MethodSubdetectors.Bodies());
 	}
+
+	/**
+	 * Filters methods contained in this stream and keeps only those with empty bodies.
+	 * @return methods with empty bodies
+	 */
+	public MethodStream methodsWithEmptyBodies() {
+		return new MethodStream(this, new MethodSubdetectors.MethodsWithEmptyBodies());
+	}
 	
 	/**
 	 * Filters methods contained in this stream and only keeps those with a return type

@@ -6,8 +6,10 @@ import nl.ou.refd.analysis.detectors.CorrespondingSubclassSpecification;
 import nl.ou.refd.analysis.detectors.Detector;
 import nl.ou.refd.analysis.detectors.DoubleDefinition;
 import nl.ou.refd.analysis.detectors.LostSpecification;
+import nl.ou.refd.analysis.detectors.LostVariableMutation;
 import nl.ou.refd.analysis.detectors.MissingAbstractImplementation;
 import nl.ou.refd.analysis.detectors.MissingDefinition;
+import nl.ou.refd.analysis.detectors.MissingLocalReferences;
 import nl.ou.refd.analysis.detectors.MissingSuperImplementation;
 import nl.ou.refd.analysis.detectors.OverloadParameterConversion;
 import nl.ou.refd.analysis.detectors.RemovedConcreteOverride;
@@ -112,6 +114,16 @@ public abstract class VerdictFunction implements DetectorVisitor {
 
 	@Override
 	public void visit(DoubleDefinition.Class detector) {
+		all(detector);
+	}
+	
+	@Override
+	public void visit(MissingLocalReferences.Body detector) {
+		all(detector);
+	}
+	
+	@Override
+	public void visit(LostVariableMutation.Body detector) {
 		all(detector);
 	}
 

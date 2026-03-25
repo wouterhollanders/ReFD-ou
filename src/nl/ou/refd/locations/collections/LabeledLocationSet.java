@@ -67,6 +67,10 @@ public class LabeledLocationSet {
 		this.label = label;
 	}
 	
+	public Set<ProgramLocation> getLocations() {
+		return this.locations;
+	}
+	
 	/**
 	 * Returns the size of the set.
 	 * @return size of the set

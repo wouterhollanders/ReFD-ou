@@ -54,6 +54,10 @@ public class ClassSpecification extends LocationSpecification {
 		return pl.taggedWith(Tags.ProgramLocation.CLASS);
 	}
 	
+	public static boolean locationIsPackage(ProgramLocation pl) {
+		return pl.taggedWith(Tags.ProgramLocation.PACKAGE);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -150,6 +154,7 @@ public class ClassSpecification extends LocationSpecification {
 	 */
 	private static ProgramLocation createClass(Graph graph) {
 		ProgramLocation rNode = graph.createProgramLocation();
+		rNode.tag(Tags.ProgramLocation.PACKAGE);
 		rNode.tag(Tags.ProgramLocation.CLASS);
 		rNode.tag(Tags.ProgramLocation.NAMESPACE);
 		rNode.tag(Tags.ProgramLocation.TYPE);

@@ -83,4 +83,8 @@ public class InstructionStream extends Stream {
 	public InstructionStream methodCalls() {
 		return new InstructionStream(this, new InstructionSubdetectors.MethodCalls());
 	}
+	
+	public InstructionStream methodAssignments() {
+		return new InstructionStream(this, new InstructionSubdetectors.MethodAssignments());
+	}
 }

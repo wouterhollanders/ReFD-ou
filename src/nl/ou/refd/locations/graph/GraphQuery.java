@@ -41,7 +41,7 @@ public class GraphQuery {
 	 * Creates a graph query from a set of program locations.
 	 * @param locations a set of program locations
 	 */
-	GraphQuery(Set<ProgramLocation> locations) {
+	public GraphQuery(Set<ProgramLocation> locations) {
 		this(Common.toQ(programLocationSetToAtlasHashSet(locations)));
 	}
 	

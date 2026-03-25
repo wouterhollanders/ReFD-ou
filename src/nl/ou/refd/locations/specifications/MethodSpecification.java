@@ -168,6 +168,10 @@ public class MethodSpecification extends LocationSpecification {
 	public void setEnclosingClass(ClassSpecification enclosingClass) {
 		this.enclosingClass = enclosingClass;
 	}
+	
+	public void setAbstract(boolean isAbstract) {
+		this.isAbstract = isAbstract;		
+	}
 
 	/**
 	 * Gets an ordered list of the types of the parameters as strings.
@@ -345,6 +349,5 @@ public class MethodSpecification extends LocationSpecification {
 	 */
 	private static ProgramLocation getType(String typeName) {
 		return Graph.query().universe().types(typeName).singleLocation();
-	}
-	
+	}	
 }

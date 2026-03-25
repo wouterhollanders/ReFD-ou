@@ -5,11 +5,14 @@ import nl.ou.refd.analysis.detectors.BrokenSubTyping;
 import nl.ou.refd.analysis.detectors.CorrespondingSubclassSpecification;
 import nl.ou.refd.analysis.detectors.DoubleDefinition;
 import nl.ou.refd.analysis.detectors.LostSpecification;
+import nl.ou.refd.analysis.detectors.LostVariableMutation;
 import nl.ou.refd.analysis.detectors.MissingAbstractImplementation;
 import nl.ou.refd.analysis.detectors.MissingDefinition;
 import nl.ou.refd.analysis.detectors.MissingSuperImplementation;
 import nl.ou.refd.analysis.detectors.OverloadParameterConversion;
 import nl.ou.refd.analysis.detectors.RemovedConcreteOverride;
+import nl.ou.refd.analysis.detectors.MissingLocalReferences;
+
 
 /**
  * Interface which represents a visitor for detectors.
@@ -26,4 +29,7 @@ public interface DetectorVisitor {
 	void visit(MissingSuperImplementation.Method detector);
 	void visit(OverloadParameterConversion.Method detector);
 	void visit(RemovedConcreteOverride.Method detector);
+	void visit(MissingLocalReferences.Body detector);
+	void visit(LostVariableMutation.Body detector);
+
 }

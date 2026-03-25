@@ -18,91 +18,92 @@ import nl.ou.refd.locations.streams.ClassStream;
 import nl.ou.refd.locations.streams.InstructionStream;
 
 /**
- * Class representing a Pull Up Method refactoring. This refactoring can be analyzed by
- * using a DangerAnalyzer object.
+ * Class representing a Pull Up Method refactoring. This refactoring can be
+ * analyzed by using a DangerAnalyzer object.
  */
 public class PullUpMethod extends Refactoring {
+	private String name = "Pull Up Method";
 
 	private final MethodSpecification target;
-	
+
 	private final boolean toDirectSuperclass;
-	
+
 	/**
 	 * Creates the Pull Up Method refactoring with a target method that should be
 	 * pull upped, and a destination class the method should be pull upped to.
-	 * @param target method that should be pull upped
+	 * 
+	 * @param target      method that should be pull upped
 	 * @param destination class the method should be pull upped to
 	 */
 	public PullUpMethod(MethodSpecification target, ClassSpecification destination) {
 		this.target = target;
-		this.toDirectSuperclass = 
-				new ClassSet(target.getEnclosingClass())
-				.stream()
-				.directSuperClasses()
-				.intersectionWithClasses(
-						new ClassSet(destination).stream()
-				).collect().size() > 0;
-		
+		this.toDirectSuperclass = new ClassSet(target.getEnclosingClass()).stream().directSuperClasses()
+				.intersectionWithClasses(new ClassSet(destination).stream()).collect().size() > 0;
+
 		MethodSpecification newLocation = target.copy();
 		newLocation.setEnclosingClass(destination);
-		
+
 		microstep(new MoveMethod(target, newLocation));
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public VerdictFunction verdictFunction(DangerAggregator aggregator) {
-		
+
 		return new VerdictFunction(aggregator) {
 			@Override
 			public void visit(CorrespondingSubclassSpecification.Method detector) {
-				partial(detector, detector.actualRisks().stream().differenceWithMethods(new MethodSet(target).stream()).collect());
+				partial(detector, detector.actualRisks().stream().differenceWithMethods(new MethodSet(target).stream())
+						.collect());
 			}
-			
+
 			@Override
 			public void visit(MissingDefinition.Method detector) {
 				none(detector);
 			}
-			
+
 			@Override
 			public void visit(MissingAbstractImplementation.Method detector) {
 				none(detector);
 			}
-			
+
 			@Override
 			public void visit(RemovedConcreteOverride.Method detector) {
 				if (toDirectSuperclass) {
 					none(detector);
-				}
-				else {
+				} else {
 					all(detector);
 				}
 			}
-			
+
 			@Override
 			public void visit(LostSpecification.Method detector) {
 				if (toDirectSuperclass) {
 					none(detector);
-				}
-				else {
+				} else {
 					all(detector);
 				}
 			}
-			
+
 			@Override
 			public void visit(MissingSuperImplementation.Method detector) {
 				if (toDirectSuperclass) {
 					none(detector);
-				}
-				else {
+				} else {
 					all(detector);
 				}
 			}
-			
+
 		};
-		
+
 	}
-	
+
+	@Override
+	public String getName() {
+
+		return name;
+	}
+
 }
